@@ -11,11 +11,11 @@ from keras import backend as K
 UPLOAD_FOLDER = 'uploads'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
-application = Flask(__name__)
-application.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # please do not remove. connection to aws database instance
-# application.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://meghana95:awsMySQLmeg95@aaeybycoop6ulm.cfsmu6vnshf2.us-east-2.rds.amazonaws.com:3306/aaeybycoop6ulm'
-# db = SQLAlchemy(application)
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://meghana95:awsMySQLmeg95@aaeybycoop6ulm.cfsmu6vnshf2.us-east-2.rds.amazonaws.com:3306/aaeybycoop6ulm'
+# db = SQLAlchemy(app)
 
 model = None
 graph = None
@@ -61,7 +61,7 @@ def predictdx(predictions):
     return x, y, z
 
 
-@application.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def upload_file():
 
     data = {"success": False}
@@ -77,7 +77,7 @@ def upload_file():
 
             filename = file.filename
 
-            filepath = os.path.join(application.config['UPLOAD_FOLDER'], filename)
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 
             file.save(filepath)
 
@@ -93,9 +93,9 @@ def upload_file():
     return render_template("index.html", diagnosis=diagnosis, confidence=confidence, info=info)
 
 
-@application.route('/analysis')
+@app.route('/analysis')
 def analysis():
     return render_template("analysis.html")
 
 if __name__ == '__main__':
-    application.run(debug=True)
+    app.run(debug=True)
